@@ -1,0 +1,14 @@
+:root {
+    --primaryBG: black;
+    --accentBG: grey;
+    --primaryText: white;
+    --accentText: grey;
+}
+
+.nav-wrapper {
+    background-color: var(--primaryBG);
+}
+
+body {
+    background-color: var(--accentBG);
+}
