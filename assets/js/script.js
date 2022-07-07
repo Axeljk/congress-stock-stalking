@@ -1,9 +1,30 @@
-function populateCongress() {
-	// Clear any previous entries in the stock selection
+// Global variables.
+var raw_data = {};
+var names = {};
 
-	// API fetch list of names of the people in congress
+function populateCongress(data) {
+	let tempNames = [];
+	let searchField = document.getElementById("search");
+
+	// Clear any previous entries in the stock selection
+	names.length = 0;
+	raw_data = data;
+
+	// Generate list of names from data.
+	for (let i = 0; i < raw_data.length; i++) {
+		if (!tempNames.includes(raw_data[i].representative)) {
+			tempNames.push(raw_data[i].representative);
+			names[tempNames[tempNames.length - 1].replace("Hon. ", "")] = null;
+		}
+	}
 
 	// fill the search list with the names
+	document.getElementsByClassName("input-field").item(0).style.display = "block";
+	M.Autocomplete.init(searchField,{
+		data:names,
+		limit:'infinit',
+		minLength:1
+	});
 }
 function populateStocks() {
 	// loop through trades of person and add each new one to array
@@ -19,12 +40,23 @@ function populateBio() {
 	// Add name, party, district, dates in office to bio card
 }
 
-function congressTrades() {
+function congressTrades(event) {
+	let nameSelected = "";
 	// Clear any previous entries in the stock selection
 
 	// Fetch all trades filtered by person selected
+	if (event.keyCode === 13) {					// When enter key is pressed...
+		event.preventDefault();
+
+		if (document.getElementById("search").value in names)
+			nameSelected = document.getElementById("search").value;
+	}
 
 	// Populate stock selection with names of stocks they've traded with populateStocks()
+	if (nameSelected !== "") {
+		alert("Searching for " + document.getElementById("search").value);
+		document.getElementById("search").value = "";
+	}
 
 	// Fetch photo and bio blurb of congressperson selected with populateBio()
 }
@@ -39,5 +71,16 @@ function stockTrades() {
 	// Populate main card of page with info or chart.js
 }
 
-// Event listener for selecting a congressperson calling congressTrades()
+// Fetch congresspersons' names before searching.
+window.onload = () => {
+	// API fetch list of all data.
+	fetch("https://house-stock-watcher-data.s3-us-west-2.amazonaws.com/data/all_transactions.json")
+		.then(response => {
+			return response.json();
+		})
+		.then(data => populateCongress(data));
+	document.getElementsByClassName("input-field").item(0).style.display = "none";
+}
+
+document.getElementById("search").addEventListener("keydown", congressTrades);
 // Event listener for selecting which stock the person traded with stockTrades()
