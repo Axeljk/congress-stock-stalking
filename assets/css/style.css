@@ -11,6 +11,27 @@
 
 body {
     background-color: var(--accentBG);
+<<<<<<< HEAD
+=======
+    color: var(--primaryText);
+}
+
+#welcome {
+    display: block;
+}
+
+.welcome-card {
+    text-align: center;
+
+}
+
+.wait {
+    text-align: center;
+}
+
+#card{
+    margin: 0 auto;
+>>>>>>> dev
 }
 
 #results {
