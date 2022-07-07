@@ -1,6 +1,7 @@
 // Global variables.
 var raw_data = {};
 var names = {};
+var stockNames = [];
 
 function populateCongress(data) {
 	let tempNames = [];
@@ -20,16 +21,57 @@ function populateCongress(data) {
 
 	// fill the search list with the names
 	document.getElementsByClassName("input-field").item(0).style.display = "block";
-	M.Autocomplete.init(searchField,{
+	M.Autocomplete.init(searchField, {
 		data:names,
 		limit:'infinit',
 		minLength:1
 	});
 }
-function populateStocks() {
+function populateStocks(name) {
+	let tableBody = document.createElement("tbody");
+	let oldBody = document.getElementsByTagName("tbody").item(0);
+
 	// loop through trades of person and add each new one to array
+	for (let i = 0; i < raw_data.length; i++) {
+		if (raw_data[i].representative === name) {
+			let tradeType = raw_data[i].type;
+			let newRow = document.createElement("tr");
+			let tickerName = document.createElement("td");
+			let purchaseDate = document.createElement("td");
+			let purchasePrice = document.createElement("td");
+			let saleDate = document.createElement("td");
+			let salePrice = document.createElement("td");
+			let gainLoss = document.createElement("td");
+
+			tickerName.textContent = raw_data[i].ticker;
+			if (tradeType === "purchase") {
+				purchaseDate.textContent = raw_data[i].transaction_date;
+				purchasePrice.textContent = "$1.00"; // polygon.io data here
+			} else if (tradeType === "sale_full" || tradeType === "sale_partial") {
+				saleDate.textContent = raw_data[i].transaction_date;
+				salePrice.textContent = "$1.00"; // polygon.io data here
+			} else
+				console.log(raw_data[i]);
+			gainLoss.textContent = raw_data[i].amount;
+
+			newRow.appendChild(tickerName);
+			newRow.appendChild(purchaseDate);
+			newRow.appendChild(purchasePrice);
+			newRow.appendChild(saleDate);
+			newRow.appendChild(salePrice);
+			newRow.appendChild(gainLoss);
+			tableBody.appendChild(newRow);
+		}
+	}
+	document.getElementsByTagName("table").item(0).replaceChild(tableBody, oldBody);
 
 	// Add array of stock names to the selection of stocks
+	stockNames.length = 0;
+	for (let i = 0; i < raw_data.length; i++) {
+		if (raw_data[i].representative === name && !stockNames.includes(raw_data[i].ticker)) {
+			stockNames.push(raw_data[i].ticker);
+		}
+	}
 }
 
 function populateBio() {
@@ -54,11 +96,11 @@ function congressTrades(event) {
 
 	// Populate stock selection with names of stocks they've traded with populateStocks()
 	if (nameSelected !== "") {
-		alert("Searching for " + document.getElementById("search").value);
-		document.getElementById("search").value = "";
-	}
+		populateStocks("Hon. " + nameSelected);
 
-	// Fetch photo and bio blurb of congressperson selected with populateBio()
+		// Fetch photo and bio blurb of congressperson selected with populateBio()
+		populateBio();
+	}
 }
 
 function stockTrades() {
