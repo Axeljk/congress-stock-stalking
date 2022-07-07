@@ -11,8 +11,6 @@
 
 body {
     background-color: var(--accentBG);
-<<<<<<< HEAD
-=======
     color: var(--primaryText);
 }
 
@@ -31,7 +29,6 @@ body {
 
 #card{
     margin: 0 auto;
->>>>>>> dev
 }
 
 #results {
