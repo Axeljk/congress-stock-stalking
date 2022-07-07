@@ -12,3 +12,9 @@
 body {
     background-color: var(--accentBG);
 }
+
+#results {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
