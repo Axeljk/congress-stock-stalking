@@ -16,7 +16,7 @@
 <body>
     <!-- Materialize for Nav Bar -->
     <nav>
-        <div class="nav-wrapper">
+        <div class="nav-wrapper grey darken-3">
           <a href="#" class="brand-logo">Congressional Stock Stalking</a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="https://en.wikipedia.org/wiki/List_of_current_United_States_senators">Current US Senators</a></li>
@@ -26,10 +26,10 @@
     </nav>
     <!-- Materilizae for Search bar -->
     <nav>
-        <div class="nav-wrapper">
-          <form>
+        <div class="nav-wrapper grey darken-3">
+          <form id="searchBar">
             <div class="input-field">
-              <input id="search" type="search" class="autocomplete" autocomplete=off required style="color: white">
+              <input id="search" type="search" class="autocomplete" autocomplete=off required style="color: black">
               <label class="label-icon" for="search"><i class="material-icons">search</i></label>
               <i class="material-icons">close</i>
             </div>
@@ -40,10 +40,14 @@
       <div id="welcome">
         <div class="row">
           <div class="col s6 offset-s3">
-            <div class="card blue-grey darken-1">
+            <div class="card grey darken-3">
               <div class="card-content white-text">
                 <span class="card-title welcome-card">Welcome to Congressional Stock Stocking</span>
-                <p>Search above for Congressman to check for Stock trades within the defined time frame. Define a time frame with the drop down bar. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem natus similique, ad impedit, cumque laboriosam dicta ut ab facere fugiat mollitia cupiditate nemo recusandae asperiores quasi? Facilis in nihil repellendus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, placeat. Eveniet deleniti, dolorem corrupti ea, fugiat quas nihil fugit architecto ducimus a sint molestias consequuntur impedit quis! Omnis, officiis impedit?</p>
+                <ol>
+                  <li>Search above for Congressman to check for Stock trades within the last two years. </li>
+                  <li>Be sure to click into the box and hit enter upon finishing Congressman name. </li>
+                  <li>Check the Stocks of Congressmember, with an image and some info on them. </li>
+                </ol>  
               </div>
               <div class="card-action">
               </div>
@@ -56,7 +60,7 @@
         <div id="loadingBox">
           <div class="row">
             <div class="col s6 offset-s3">
-              <div class="card blue-grey darken-1">
+              <div class="card grey darken-3">
                 <div class="card-content white-text">
                   <span class="card-title welcome-card">Loading Data</span>
                   <p class="wait">Please Wait</p>
@@ -76,7 +80,7 @@
       <!-- Materialize for Table Card -->
       <div class="row ">
         <div class="col s6 m6 ">
-          <div class="card blue-grey darken-1">
+          <div class="card grey darken-3">
             <div class="card-content white-text">
               <span class="card-title">Card Title</span>
               <!-- Materialize for table  -->
@@ -96,39 +100,38 @@
 
                 <tbody>
                   <tr>
-                    <td class="tickerSym">Alvin</td>
-                    <td class="purchaseDate">Eclair</td>
-                    <td class="purchasePrice">Alvin</td>
-                    <td class="saleDate">$0.87</td>
-                    <td class="salePrice">Eclair</td>
-                    <td class="gainsLoss">Eclair</td>
-                    <td class="volume">Eclair</td>
-                    <td class="forecast">$0.87</td>
+                    <td class="tickerSym"></td>
+                    <td class="purchaseDate"></td>
+                    <td class="purchasePrice"></td>
+                    <td class="saleDate"></td>
+                    <td class="salePrice"></td>
+                    <td class="gainsLoss"></td>
+                    <td class="volume"></td>
+                    <td class="forecast"></td>
                   </tr>
                   <tr>
-                    <td class="tickerSym">Alvin</td>
-                    <td class="purchaseDate">Eclair</td>
-                    <td class="purchasePrice">Alvin</td>
-                    <td class="saleDate">$0.87</td>
-                    <td class="salePrice">Eclair</td>
-                    <td class="gainsLoss">Eclair</td>
-                    <td class="volume">Eclair</td>
-                    <td class="forecast">$0.87</td>
+                    <td class="tickerSym"></td>
+                    <td class="purchaseDate"></td>
+                    <td class="purchasePrice"></td>
+                    <td class="saleDate"></td>
+                    <td class="salePrice"></td>
+                    <td class="gainsLoss"></td>
+                    <td class="volume"></td>
+                    <td class="forecast"></td>
                   </tr>
                   <tr>
-                    <td class="tickerSym">Alvin</td>
-                    <td class="purchaseDate">Eclair</td>
-                    <td class="purchasePrice">Alvin</td>
-                    <td class="saleDate">$0.87</td>
-                    <td class="salePrice">Eclair</td>
-                    <td class="gainsLoss">Eclair</td>
-                    <td class="volume">Eclair</td>
-                    <td class="forecast">$0.87</td>
+                    <td class="tickerSym"></td>
+                    <td class="purchaseDate"></td>
+                    <td class="purchasePrice"></td>
+                    <td class="saleDate"></td>
+                    <td class="salePrice"></td>
+                    <td class="gainsLoss"></td>
+                    <td class="volume"></td>
+                    <td class="forecast"></td>
                   </tr>
                 </tbody>
               </table>
-              <p>I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively.</p>
+              <p>Stock Data collected from House Stock Watcher</p>
             </div>
             <div class="card-action">
             </div>
@@ -136,7 +139,7 @@
         </div>
         <!-- Materialize for Congressman Card -->
         <div class="col s6 m6">
-          <div class="card blue-grey darken-1">
+          <div class="card grey darken-3">
             <div class="card-image">
               <img src="http://placekitten.com/200/200">
               <span class="card-title">Congressman Name</span>
@@ -153,7 +156,7 @@
       </div>
     </div>
     <!-- Materialize Footer -->        
-    <div class="footer-copyright blue-grey darken-1">
+    <div class="footer-copyright grey darken-3">
       <div class="container">
       © 2022 UW Group 1
       <a class="white-text text-lighten-4 right" href="#!">More Links</a>
