@@ -42,6 +42,18 @@ function populateStocks(name) {
 			let saleDate = document.createElement("td");
 			let salePrice = document.createElement("td");
 			let gainLoss = document.createElement("td");
+			
+			let transactionDate = raw_data[i].transaction_date;
+			let polygonAPIurl = 'https://house-stock-watcher-data.s3-us-west-2.amazonaws.com/data/all_transactions.json';
+			let polygonAPIkey = '?adjusted=true&apiKey=CsDKqvk0mc4F35tmdksdYVV0lfK_QZF2';
+			
+
+
+
+			// fetch(polygonAPIurl+transactionDate+polygonAPIkey)
+  			// .then(response => response.json())
+  			// .then(data => console.log(data));
+
 
 			tickerName.textContent = raw_data[i].ticker;
 			if (tradeType === "purchase") {
@@ -61,6 +73,7 @@ function populateStocks(name) {
 			newRow.appendChild(salePrice);
 			newRow.appendChild(gainLoss);
 			tableBody.appendChild(newRow);
+			console.log()
 		}
 	}
 	document.getElementsByTagName("table").item(0).replaceChild(tableBody, oldBody);
@@ -74,13 +87,32 @@ function populateStocks(name) {
 	}
 }
 
-function populateBio() {
-	// Fetch data on person from MediaWiki
+function populateBio(name) {
+	let url = "https://en.wikipedia.org/w/api.php"; 
+	// wikipedia image api
+	
+	// paramas. title refernces the search input from the user
+	var params = {
+		action: "query",
+		prop: "pageimages",
+		titles: name,
+		format: "json"
+	};
+	// API key
+	url = url + "?origin=*";
+	Object.keys(params).forEach(function(key){url += "&" + key + "=" + params[key];});
+		// fetches image thumbnail from wikipedia based on user search input 
+		fetch(url)
+		.then(response => response.json())
+		.then(function(data) {
+			var pageID = Object.keys(data.query.pages)[0]
+			var portrait = data.query.pages[pageID].thumbnail.source
+			console.log(data.query.pages[pageID].thumbnail.source)
+			document.getElementById("portrait").src = portrait
+	})
 
-	// Add photo to bio card
-
-	// Add name, party, district, dates in office to bio card
 }
+
 
 function congressTrades(event) {
 	let nameSelected = "";
@@ -99,7 +131,7 @@ function congressTrades(event) {
 		populateStocks("Hon. " + nameSelected);
 
 		// Fetch photo and bio blurb of congressperson selected with populateBio()
-		populateBio();
+		populateBio(nameSelected);
 	}
 }
 
@@ -122,7 +154,18 @@ window.onload = () => {
 		})
 		.then(data => populateCongress(data));
 	document.getElementsByClassName("input-field").item(0).style.display = "none";
+
 }
 
 document.getElementById("search").addEventListener("keydown", congressTrades);
 // Event listener for selecting which stock the person traded with stockTrades()
+
+
+
+
+
+// console.log(polygonAPIurl)
+
+// fetch(polygonAPIurl)
+//   .then(response => response.json())
+//   .then(data => console.log(data));
