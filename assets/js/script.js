@@ -2,6 +2,9 @@
 var raw_data = {};
 var names = {};
 var stockNames = [];
+var welcome = document.querySelector('#welcome')
+var loading = document.querySelector('#loading')
+var results = document.querySelector('#results')
 
 function populateCongress(data) {
 	let tempNames = [];
@@ -124,6 +127,9 @@ function congressTrades(event) {
 
 		if (document.getElementById("search").value in names)
 			nameSelected = document.getElementById("search").value;
+			welcome.setAttribute("style", "display:none");
+			loading.setAttribute("style", "display:none");
+			results.setAttribute("style", "display:block");
 	}
 
 	// Populate stock selection with names of stocks they've traded with populateStocks()

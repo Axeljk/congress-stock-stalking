@@ -5,10 +5,6 @@
     --accentText: grey;
 }
 
-.nav-wrapper {
-    background-color: var(--primaryBG);
-}
-
 body {
     background-color: var(--accentBG);
     color: var(--primaryText);
@@ -41,8 +37,6 @@ body {
     margin: 0 auto;
 }
 
-/* #results {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-} */
+#results {
+    display: none;
+}
