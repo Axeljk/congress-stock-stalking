@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="assets\css\style.css">
 </head>
 <body>
-    <!-- Materialize for Nav Bar -->
+  <main>
+  <!-- Materialize for Nav Bar -->
     <nav>
         <div class="nav-wrapper grey darken-3">
           <a href="#" class="brand-logo">Congressional Stock Stalking</a>
@@ -29,7 +30,7 @@
         <div class="nav-wrapper grey darken-3">
           <form id="searchBar">
             <div class="input-field">
-              <input id="search" type="search" class="autocomplete" autocomplete=off required style="color: black">
+              <input id="search" type="search" class="autocomplete" autocomplete=off required>
               <label class="label-icon" for="search"><i class="material-icons">search</i></label>
               <i class="material-icons">close</i>
             </div>
@@ -139,10 +140,11 @@
         </div>
         <!-- Materialize for Congressman Card -->
         <div class="col s6 m6">
+         <div id="congressCard">
           <div class="card grey darken-3">
             <div class="card-image">
               <img id= "portrait" src="">
-              <span class="card-title">Congressman Name</span>
+              <span id="CongressName" class="card-content">Congressman Name</span>
             </div>
             <div class="card-content">
               <p>I am a very simple card. I am good at containing small bits of information.
@@ -152,10 +154,13 @@
               <a href="#">Link to Congressmans Wiki Page</a>
             </div>
           </div>
+         </div> 
         </div>
       </div>
     </div>
-    <!-- Materialize Footer -->        
+  </main>  
+    <!-- Materialize Footer --> 
+  <footer>   
     <div class="footer-copyright grey darken-3">
       <div class="container">
       © 2022 UW Group 1
