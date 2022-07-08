@@ -16,7 +16,17 @@ body {
 
 #welcome {
     display: block;
+    /* justify-content: center;
+    align-items: center; */
 }
+
+#card1 {
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    margin: 0 auto;
+}
+
 
 .welcome-card {
     text-align: center;
@@ -31,8 +41,8 @@ body {
     margin: 0 auto;
 }
 
-#results {
+/* #results {
     display: flex;
     justify-content: center;
     align-items: center;
-}
+} */
