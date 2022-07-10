@@ -82,8 +82,10 @@ function populateBio(name) {
 		.then(function(data) {
 			var pageID = Object.keys(data.query.pages)[0]
 			var portrait = data.query.pages[pageID].thumbnail.source
-			console.log(data.query.pages[pageID].thumbnail.source)
+			var nameOnCardtext = data.query.pages[pageID].title 
+			console.log(data.query.pages[pageID].title)
 			document.getElementById("portrait").src = portrait
+			document.getElementById("nameOnCard").innerHTML = nameOnCardtext
 	})
 
 }
