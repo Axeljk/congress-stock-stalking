@@ -198,7 +198,46 @@ function getPrice(name, date) {
 			return "";
 		}
 	} else {
-		console.error("STOCK: NO RESULTS", stock)
+		console.error("STOCK: NO RESULTS", stock);
+		return "";
+	}
+}
+
+// Gets the forecast of the stock after the trade.
+function getStockForecast(name, date) {
+	let stock = stockData.find(element => element.ticker == name);
+	let day = new Date(date).getTime();
+	let results;
+
+	if (stock == undefined) {
+		console.error("STOCK: UNDEFINED", stock, name);
+		return "";
+	}
+
+	if ("results" in stock) {
+		results = stock.results.filter(elements => elements.t > day);
+
+		if (results != undefined) {
+			let high = results[0].vw;
+			let low = results[0].vw;
+
+			if (results.length > 60)
+				results.length = 60;
+
+			for (let i = 0; i < results.length; i++) {
+				if (results[i].vw > high)
+					high = results[i].vw;
+				else (results[i].vw < low)
+					low = results[i].vw;
+			}
+
+			return "H: " + high + "/L: " + low;
+		} else {
+			console.error("STOCK: BAD RESULTS", stock, results);
+			return "";
+		}
+	} else {
+		console.error("STOCK: NO RESULTS", stock);
 		return "";
 	}
 }
