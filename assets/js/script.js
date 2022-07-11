@@ -114,7 +114,7 @@ function congressTrades() {
 		let nameSelected = document.getElementById("search").value;
 		welcome.setAttribute("style", "display:none");
 		loading.setAttribute("style", "display:none");
-		results.setAttribute("style", "display:flex");
+		results.setAttribute("style", "display:block");
 
 		// Populate stock selection with names of stocks they've traded with populateStocks().
 		populateStocks("Hon. " + nameSelected);
