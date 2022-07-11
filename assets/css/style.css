@@ -44,7 +44,12 @@ body {
 
 #results {
     display: none;
-    margin: 7em;
+    margin: 1em;
+    flex-wrap: wrap;
+}
+
+.row {
+    display: flex;
 }
 
 body {
@@ -74,4 +79,14 @@ input:active {
 #nameOnCard {
     font-size: x-large;
     color: White;
+}
+
+thead,
+tbody {
+  display: block;
+}
+
+tbody {
+  max-height: 750px;
+  overflow: auto;
 }
