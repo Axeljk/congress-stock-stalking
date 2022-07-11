@@ -106,6 +106,26 @@ function populateBio(name) {
 			document.getElementById("nameOnCard").innerHTML = nameOnCardtext
 	})
 
+	var summaryParams = {
+		action: "query",
+		prop: "extracts",
+		titles: name,
+		format: "json",
+		exintro: true,
+		exsentences: 6,
+	}
+
+	Object.keys(summaryParams).forEach(function(key){url += "&" + key + "=" + summaryParams[key];});
+		fetch(url)
+		.then(response => response.json())
+		.then(function(data) {
+			var pageID = Object.keys(data.query.pages)[0]
+			var extractsVar = data.query.pages[pageID].extract
+			console.log(data)
+			console.log(extractsVar)
+			document.getElementById("bioCard").innerHTML = extractsVar
+	})
+
 }
 
 // Handles calling other functions when a congressperson is selected.
