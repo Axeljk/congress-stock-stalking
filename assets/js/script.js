@@ -3,6 +3,8 @@ var names = {};
 var rawData = {};
 var stockData = [];
 var trades = [];
+var startDate = "";
+var endDate = "";
 var welcome = document.querySelector('#welcome')
 var loading = document.querySelector('#loading')
 var results = document.querySelector('#results')
@@ -24,6 +26,10 @@ function populateCongress(data) {
 		}
 	}
 
+	// Set time period of available data.
+	startDate = rawData[0].transaction_date;
+	endDate = new Date().toISOString().slice(0, 10);
+
 	// fill the search list with the names.
 	document.getElementsByClassName("input-field").item(0).style.display = "block";
 	M.Autocomplete.init(searchField, {
@@ -40,11 +46,14 @@ function populateCongress(data) {
 function populateStocks(name) {
 	let stockNames = [];
 
+	stockData.length = 0;
+	trades.length = 0;
+
 	// loop through trades of person and add each new one to array.
 	for (let i = 0; i < rawData.length; i++) {
 		if (rawData[i].representative === name) {
-			if (!stockNames.includes(rawData[i].ticker)) {
-				stockNames.push(rawData[i].ticker);
+			if (!stockNames.includes(rawData[i].ticker) && rawData[i].ticker !== "--") {
+				stockNames.push(rawData[i].ticker.replace("$", "-"));
 			}
 			 trades.push({
 				ticker: rawData[i].ticker,
@@ -57,7 +66,7 @@ function populateStocks(name) {
 
 	// Fetch data for each stock.
 	for (let i = 0; i < stockNames.length; i++) {
-		fetch ("https://api.polygon.io/v2/aggs/ticker/" + stockNames[i] + "/range/1/day/2020-06-01/2022-07-09?apiKey=GR1YmLVtG0v9RpiVBa4sr84JTBcL6NdT")
+		fetch ("https://api.polygon.io/v2/aggs/ticker/" + stockNames[i] + "/range/1/day/" + startDate + "/" + endDate + "?apiKey=GR1YmLVtG0v9RpiVBa4sr84JTBcL6NdT")
 			.then(response => response.json())
 			.then((responseJson) => {
 				stockData.push(responseJson);
@@ -101,7 +110,6 @@ function populateBio(name) {
 
 // Handles calling other functions when a congressperson is selected.
 function congressTrades() {
-	// Fetch all trades filtered by person selected
 	if (document.getElementById("search").value in names) {
 		let nameSelected = document.getElementById("search").value;
 		welcome.setAttribute("style", "display:none");
@@ -119,7 +127,10 @@ function congressTrades() {
 // Creates a table of the person's trades.
 function stockTrades() {
 	let tableBody = document.createElement("tbody");
-	let oldBody = document.getElementsByTagName("tbody").item(0);
+	let tradeTable = document.getElementsByTagName("table").item(0);
+
+	// First remove the old table.
+	tradeTable.removeChild(tradeTable.children[1]);
 
 	// Populate main card of page with info or chart.js
 	for (let i = 0; i < trades.length; i++) {
@@ -134,16 +145,20 @@ function stockTrades() {
 		let volume = document.createElement("td");
 		let forecast = document.createElement("td");
 
+		// Skip entry if there is bad data.
+		if (trades[i].ticker === "--")
+			continue;
+
 		tickerName.textContent = trades[i].ticker;
 
 		if (tradeType === "purchase") {
 			purchaseDate.textContent = trades[i].date;
-			purchasePrice.textContent = getPrice(trades[i].ticker, trades[i].date);
+			purchasePrice.textContent = getPrice(trades[i].ticker.replace("$", "-"), trades[i].date);
 		} else if (tradeType === "sale_full" || tradeType === "sale_partial") {
 			saleDate.textContent = trades[i].date;
-			salePrice.textContent = getPrice(trades[i].ticker, trades[i].date);
+			salePrice.textContent = getPrice(trades[i].ticker.replace("$", "-"), trades[i].date);
 		} else
-			console.log("Not included:", trades[i]);
+			console.warn(trades[i].type + "s are not included.", trades[i]);
 		gainLoss.textContent = "";
 		volume.textContent = trades[i].volume;
 		forecast.textContent = "";
@@ -159,8 +174,8 @@ function stockTrades() {
 		tableBody.appendChild(newRow);
 	}
 
-	// Clear any info previously entered by replacing it with the new data.
-	document.getElementsByTagName("table").item(0).replaceChild(tableBody, oldBody);
+	// Attach new table body to the table.
+	tradeTable.appendChild(tableBody);
 }
 
 // Searches for the weighted average (vw) price for the stock on the day given.
@@ -169,14 +184,23 @@ function getPrice(name, date) {
 	let day = new Date(date).getTime();
 	let result;
 
-	if (stock.results != undefined) {
+	if (stock == undefined) {
+		console.error("STOCK: UNDEFINED", stock, name);
+		return "";
+	}
+
+	if ("results" in stock) {
 		result = stock.results.find(elements => elements.t > day);
 		if (result != undefined)
 			return "$" + result.vw.toFixed(2);
-		else
-			console.log("BAD RESULT?", stock, result);
-	} else
+		else {
+			console.error("STOCK: BAD RESULTS", stock, result);
+			return "";
+		}
+	} else {
+		console.error("STOCK: NO RESULTS", stock)
 		return "";
+	}
 }
 
 // Fetch congresspersons' names before searching.
