@@ -232,15 +232,11 @@ function getGainLoss(trade) {
 
 		for (let i = 0; i < results.length; i++) {
 			if (results[i].type == "purchase") {
-				let oldPrice = getPrice(results[i].ticker.replace("$", "-"), results[i].date).slice(1);
-				let newPrice = getPrice(trade.ticker.replace("$", "-"), trade.date).slice(1);
-				let difference = "";
+				let oldPrice = parseFloat(getPrice(results[i].ticker.replace("$", "-"), results[i].date).slice(1));
+				let newPrice = parseFloat(getPrice(trade.ticker.replace("$", "-"), trade.date).slice(1));
+				let difference = (newPrice / oldPrice * 100) - 100;
 
-				if (newPrice < oldPrice)
-					difference += "-";
-				difference += "$" + Math.abs(parseFloat(newPrice) - parseFloat(oldPrice)).toFixed(2);
-
-				return difference;
+				return difference.toFixed(0) + "%";
 			}
 		}
 		return "---";
