@@ -49,7 +49,7 @@ body {
 }
 
 .row {
-    display: flex;
+    display: block;
 }
 
 body {
@@ -81,12 +81,33 @@ input:active {
     color: White;
 }
 
+
+
+/* tbody {
+  max-height: 750px;
+  overflow-y: auto;
+} */
+
 thead,
 tbody {
-  display: block;
+  width: 100%;
+}
+
+table {
+    max-height: 750px;
+    display:block ;
+    overflow: scroll;
 }
 
 tbody {
   max-height: 750px;
-  overflow: auto;
+}
+
+tr {
+    width: 100%;
+}
+
+td {
+    width: 12.5%;
+    padding: 1em 0;
 }
