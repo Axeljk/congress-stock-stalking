@@ -1,59 +1,65 @@
 // Global variables.
-var raw_data = {};
 var names = {};
+var rawData = {};
 var stockData = [];
 var trades = [];
 var welcome = document.querySelector('#welcome')
 var loading = document.querySelector('#loading')
 var results = document.querySelector('#results')
 
+// Creates a list of names from the raw congress data.
 function populateCongress(data) {
 	let tempNames = [];
 	let searchField = document.getElementById("search");
 
-	// Clear any previous entries in the stock selection
+	// Clear any previous entries in the stock selection.
 	names.length = 0;
-	raw_data = data;
+	rawData = data;
 
 	// Generate list of names from data.
-	for (let i = 0; i < raw_data.length; i++) {
-		if (!tempNames.includes(raw_data[i].representative)) {
-			tempNames.push(raw_data[i].representative);
+	for (let i = 0; i < rawData.length; i++) {
+		if (!tempNames.includes(rawData[i].representative)) {
+			tempNames.push(rawData[i].representative);
 			names[tempNames[tempNames.length - 1].replace("Hon. ", "")] = null;
 		}
 	}
 
-	// fill the search list with the names
+	// fill the search list with the names.
 	document.getElementsByClassName("input-field").item(0).style.display = "block";
 	M.Autocomplete.init(searchField, {
-		data:names,
-		limit:'infinit',
-		minLength:1
+		data: names,
+		limit: 10,
+		minLength: 1,
+		onAutocomplete: () => {
+			congressTrades();
+		}
 	});
 }
+
+// Filters all data on person and fetches data on all of their stocks.
 function populateStocks(name) {
 	let stockNames = [];
 
-	// loop through trades of person and add each new one to array
-	for (let i = 0; i < raw_data.length; i++) {
-		if (raw_data[i].representative === name) {
-			if (!stockNames.includes(raw_data[i].ticker)) {
-				stockNames.push(raw_data[i].ticker);
+	// loop through trades of person and add each new one to array.
+	for (let i = 0; i < rawData.length; i++) {
+		if (rawData[i].representative === name) {
+			if (!stockNames.includes(rawData[i].ticker)) {
+				stockNames.push(rawData[i].ticker);
 			}
 			 trades.push({
-				ticker: raw_data[i].ticker,
-				type: raw_data[i].type,
-				date: raw_data[i].transaction_date,
-				volume: raw_data[i].amount
+				ticker: rawData[i].ticker,
+				type: rawData[i].type,
+				date: rawData[i].transaction_date,
+				volume: rawData[i].amount
 			});
 		}
 	}
 
+	// Fetch data for each stock.
 	for (let i = 0; i < stockNames.length; i++) {
 		fetch ("https://api.polygon.io/v2/aggs/ticker/" + stockNames[i] + "/range/1/day/2020-06-01/2022-07-09?apiKey=GR1YmLVtG0v9RpiVBa4sr84JTBcL6NdT")
 			.then(response => response.json())
 			.then((responseJson) => {
-				console.log("stock:", responseJson)
 				stockData.push(responseJson);
 
 				if (stockData.length === stockNames.length)
@@ -62,6 +68,7 @@ function populateStocks(name) {
 	}
 }
 
+// Creates a bio card on the selected person.
 function populateBio(name) {
 	let url = "https://en.wikipedia.org/w/api.php";
 	// wikipedia image api
@@ -82,7 +89,7 @@ function populateBio(name) {
 		.then(function(data) {
 			var pageID = Object.keys(data.query.pages)[0]
 			var portrait = data.query.pages[pageID].thumbnail.source
-			var nameOnCardtext = data.query.pages[pageID].title 
+			var nameOnCardtext = data.query.pages[pageID].title
 			console.log(data.query.pages[pageID].title)
 			document.getElementById("portrait").src = portrait
 			document.getElementById("nameOnCard").innerHTML = nameOnCardtext
@@ -90,30 +97,24 @@ function populateBio(name) {
 
 }
 
-function congressTrades(event) {
-	let nameSelected = "";
-	// Clear any previous entries in the stock selection
-
+// Handles calling other functions when a congressperson is selected.
+function congressTrades() {
 	// Fetch all trades filtered by person selected
-	if (event.keyCode === 13) {					// When enter key is pressed...
-		event.preventDefault();
+	if (document.getElementById("search").value in names) {
+		let nameSelected = document.getElementById("search").value;
+		welcome.setAttribute("style", "display:none");
+		loading.setAttribute("style", "display:none");
+		results.setAttribute("style", "display:block");
 
-		if (document.getElementById("search").value in names)
-			nameSelected = document.getElementById("search").value;
-			welcome.setAttribute("style", "display:none");
-			loading.setAttribute("style", "display:none");
-			results.setAttribute("style", "display:block");
-	}
-
-	// Populate stock selection with names of stocks they've traded with populateStocks()
-	if (nameSelected !== "") {
+		// Populate stock selection with names of stocks they've traded with populateStocks().
 		populateStocks("Hon. " + nameSelected);
 
-		// Fetch photo and bio blurb of congressperson selected with populateBio()
+		// Fetch photo and bio blurb of congressperson selected with populateBio().
 		populateBio(nameSelected);
 	}
 }
 
+// Creates a table of the person's trades.
 function stockTrades() {
 	let tableBody = document.createElement("tbody");
 	let oldBody = document.getElementsByTagName("tbody").item(0);
@@ -140,7 +141,7 @@ function stockTrades() {
 			saleDate.textContent = trades[i].date;
 			salePrice.textContent = getPrice(trades[i].ticker, trades[i].date);
 		} else
-			console.log(trades[i]);
+			console.log("Not included:", trades[i]);
 		gainLoss.textContent = "";
 		volume.textContent = trades[i].volume;
 		forecast.textContent = "";
@@ -187,5 +188,11 @@ window.onload = () => {
 		.then(data => populateCongress(data));
 }
 
-document.getElementById("search").addEventListener("keydown", congressTrades);
+document.getElementById("search").addEventListener("keydown", (event) => {
+	// When enter is pressed...
+	if (event.keyCode === 13) {
+		event.preventDefault();
+		congressTrades();
+	}
+});
 // Event listener for selecting which stock the person traded with stockTrades()
