@@ -179,9 +179,9 @@ function stockTrades() {
 			salePrice.textContent = getPrice(trades[i].ticker.replace("$", "-"), trades[i].date);
 		} else
 			console.warn(trades[i].type + "s are not included.", trades[i]);
-		gainLoss.textContent = "";
+		gainLoss.textContent = getGainLoss(trades[i]);
 		volume.textContent = trades[i].volume;
-		forecast.textContent = "";
+		forecast.textContent = getStockForecast(trades[i].ticker.replace("$", "-"), trades[i].date);
 
 		newRow.appendChild(tickerName);
 		newRow.appendChild(purchaseDate);
@@ -206,7 +206,7 @@ function getPrice(name, date) {
 
 	if (stock == undefined) {
 		console.error("STOCK: UNDEFINED", stock, name);
-		return "";
+		return "???";
 	}
 
 	if ("results" in stock) {
@@ -215,11 +215,72 @@ function getPrice(name, date) {
 			return "$" + result.vw.toFixed(2);
 		else {
 			console.error("STOCK: BAD RESULTS", stock, result);
-			return "";
+			return "???";
 		}
 	} else {
-		console.error("STOCK: NO RESULTS", stock)
-		return "";
+		console.error("STOCK: NO RESULTS", stock);
+		return "???";
+	}
+}
+
+// Get a gain/loss value *if the data exists*.
+function getGainLoss(trade) {
+	if (trade.type === "sale_full" || trade.type === "sale_partial") {
+		// Filter the data down to trades before this one.
+		let results = trades.filter(elements => elements.ticker == trade.ticker);
+		results = results.slice(0, results.indexOf(trade));
+
+		for (let i = 0; i < results.length; i++) {
+			if (results[i].type == "purchase") {
+				let oldPrice = parseFloat(getPrice(results[i].ticker.replace("$", "-"), results[i].date).slice(1));
+				let newPrice = parseFloat(getPrice(trade.ticker.replace("$", "-"), trade.date).slice(1));
+				let difference = (newPrice / oldPrice * 100) - 100;
+
+				return difference.toFixed(0) + "%";
+			}
+		}
+		return "---";
+		// search trades up to this point with same ticker and type purchase
+	} else
+		return "---"
+}
+
+// Gets the forecast of the stock after the trade.
+function getStockForecast(name, date) {
+	let stock = stockData.find(element => element.ticker == name);
+	let day = new Date(date).getTime();
+	let results;
+
+	if (stock == undefined) {
+		console.error("STOCK: UNDEFINED", stock, name);
+		return "???";
+	}
+
+	if ("results" in stock) {
+		results = stock.results.filter(elements => elements.t > day);
+
+		if (results.length > 0) {
+			let high = results[0].vw;
+			let low = results[0].vw;
+
+			if (results.length > 60)
+				results.length = 60;
+
+			for (let i = 0; i < results.length; i++) {
+				if (results[i].vw > high)
+					high = results[i].vw;
+				else (results[i].vw < low)
+					low = results[i].vw;
+			}
+
+			return "H: $" + high.toFixed(2) + "/L: $" + low.toFixed(2);
+		} else {
+			console.error("STOCK: BAD RESULTS", stock, results);
+			return "???";
+		}
+	} else {
+		console.error("STOCK: NO RESULTS", stock);
+		return "???";
 	}
 }
 
