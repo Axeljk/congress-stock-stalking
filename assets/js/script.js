@@ -73,6 +73,8 @@ function populateBio(name) {
 	let url = "https://en.wikipedia.org/w/api.php";
 	// wikipedia image api
 
+	document.getElementById("linkToWiki").href = "https://en.wikipedia.org/wiki/"+name
+
 	// paramas. title refernces the search input from the user
 	var params = {
 		action: "query",
