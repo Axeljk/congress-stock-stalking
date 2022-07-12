@@ -102,7 +102,21 @@ function populateBio(name) {
 			var portrait = data.query.pages[pageID].thumbnail.source
 			var nameOnCardtext = data.query.pages[pageID].title
 			console.log(data.query.pages[pageID].title)
-			document.getElementById("portrait").src = portrait
+			console.log(portrait)
+
+			var highResThumb = portrait.replace("thumb/", "")
+
+			var highRestSplit = highResThumb.split("/")
+
+			var finalPortrait = highRestSplit.slice(0,-1).join('/')
+			
+			console.log(highResThumb)
+			console.log(highRestSplit)
+			console.log(finalPortrait)
+
+
+
+			document.getElementById("portrait").src = finalPortrait
 			document.getElementById("nameOnCard").innerHTML = nameOnCardtext
 	})
 
