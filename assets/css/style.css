@@ -26,10 +26,16 @@ nav > div {
 }
 
 #welcome {
-    display: block;
-    /* justify-content: center;
-    align-items: center; */
-    margin: 7em auto;
+    align-self: center;
+    margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: calc(100vh - 180px);
+	width: 100%;
+}
+#welcome .row {
+	width: 100%;
 }
 
 #card1 {
@@ -80,6 +86,7 @@ body {
 
 main {
 	flex: 1 0 auto;
+	height: 100%;
 }
 
 input{

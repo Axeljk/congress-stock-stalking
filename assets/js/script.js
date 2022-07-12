@@ -80,17 +80,26 @@ function populateStocks(name) {
 		return 0;
 	});
 
-	// Fetch data for each stock.
-	for (let i = 0; i < stockNames.length; i++) {
-		fetch ("https://api.polygon.io/v2/aggs/ticker/" + stockNames[i] + "/range/1/day/" + startDate + "/" + endDate + "?apiKey=GR1YmLVtG0v9RpiVBa4sr84JTBcL6NdT")
-			.then(response => response.json())
-			.then((responseJson) => {
-				stockData.push(responseJson);
-
-				if (stockData.length === stockNames.length)
-					stockTrades();
-			});
+	// Remove trades without a ticker.
+	for (let i = trades.length - 1; i >= 0; i--) {
+		if (trades[i].ticker == "--")
+			trades.splice(i, 1);
 	}
+
+	// Fetch data for each stock.
+	if (trades.length > 0) {
+		for (let i = 0; i < stockNames.length; i++) {
+			fetch ("https://api.polygon.io/v2/aggs/ticker/" + stockNames[i] + "/range/1/day/" + startDate + "/" + endDate + "?apiKey=GR1YmLVtG0v9RpiVBa4sr84JTBcL6NdT")
+				.then(response => response.json())
+				.then((responseJson) => {
+					stockData.push(responseJson);
+
+					if (stockData.length === stockNames.length)
+						stockTrades();
+				});
+		}
+	} else
+		stockTrades();
 }
 
 // Creates a bio card on the selected person.
