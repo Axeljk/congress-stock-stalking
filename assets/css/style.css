@@ -96,7 +96,10 @@ input:active {
     color: White;
 }
 
-
+.text-bold {
+	font-weight: 600;
+	text-shadow: -1px -1px 1px #3339, 1px 1px 1px #3339;
+}
 
 /* tbody {
   max-height: 750px;
