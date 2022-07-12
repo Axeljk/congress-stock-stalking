@@ -11,7 +11,7 @@ body {
 }
 
 
-img {
+nav img {
 	top: 10px;
 	height: 3em;
 	display: inline-block;
@@ -111,7 +111,7 @@ tbody {
 }
 
 .mainCard {
-    max-height: calc(100vh - 200px);
+    max-height: calc(100vh - 215px);
     overflow-y: auto;
 	display: block;
 }
