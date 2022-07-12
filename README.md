@@ -28,3 +28,6 @@ Once you've selected a congressperson, you should begin to see a table of their 
 
 ## License
 
+Copyright (c) The Creeps 2022
+
+Licensed under the MIT license.
