@@ -20,6 +20,24 @@ Once you've selected a congressperson, you should begin to see a table of their 
 
 ![data table screenshot](assets/img/screenshot_02.jpg)
 
+## Dependencies
+
+* [Materialize CSS](https://materializecss.com/)
+
+	* Page layout and styling framework.
+
+* [House Stock Watcher API](https://housestockwatcher.com/api)
+
+	* Database of trades made by congress members.
+
+* [Polygon.io API](https://polygon.io/)
+
+	* Historical prices of stocks.
+
+* [MediaWiki API](https://www.mediawiki.org/wiki/API:Main_page)
+
+	* Photo and bio of congresspersons.
+
 ## Credits
 
 - Aelin Rose
@@ -30,4 +48,4 @@ Once you've selected a congressperson, you should begin to see a table of their 
 
 Copyright (c) The Creeps 2022
 
-Licensed under the MIT license.
+Licensed under the [MIT](license) license.
