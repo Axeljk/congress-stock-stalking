@@ -110,10 +110,10 @@ tbody {
   width: 100%;
 }
 
-table {
-    height: calc(100vh - 300px);
+.mainCard {
+    max-height: calc(100vh - 200px);
     overflow-y: auto;
-
+	display: block;
 }
 
 td, th {

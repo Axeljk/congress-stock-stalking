@@ -31,6 +31,7 @@ function populateCongress(data) {
 	endDate = new Date().toISOString().slice(0, 10);
 
 	// fill the search list with the names.
+	searchField.disabled = false;
 	document.getElementById("searchIcon").style.display = "inline-block";
 	M.Autocomplete.init(searchField, {
 		data: names,

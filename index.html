@@ -30,7 +30,7 @@
         <div class="nav-wrapper">
 			<form style="height:64px">
 				<div class="input-field">
-					<input id="search" type="search" class="autocomplete" autocomplete=off required>
+					<input id="search" type="search" class="autocomplete" autocomplete=off required disabled>
 					<label id="searchIcon" class="label-icon" for="search"><i class="material-icons">search</i></label>
 					<i class="material-icons">close</i>
 				</div>
@@ -87,7 +87,7 @@
         <!-- Materialize for Congressman Card -->
         <div class="col s12 m12 l3">
          <div id="congressCard">
-          <div class="card grey darken-3">
+          <div class="card grey darken-3 mainCard">
             <div class="card-image">
               <img id= "portrait" src="">
               <span id ="nameOnCard" class="card-content">Congressman Name</span>
@@ -103,9 +103,9 @@
          </div>
         </div>
       <!-- Materialize for Table Card -->
-        <div class="col s12 m12 l9 grey darken-3 card-content white-text">
-        	<span class="card-title">Stock Trades</span>
+        <div class="col s12 m12 l9 grey darken-3 card-content white-text mainCard">
             <!-- Materialize for table  -->
+			<h2>Stock Trades</h2>
             <table class="striped">
             	<thead>
                 	<tr>
