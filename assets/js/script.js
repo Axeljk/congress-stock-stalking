@@ -1,3 +1,7 @@
+// Constant values.
+const YEARS_HISTORY = 3;
+const FORECAST_DAYS = 60;
+
 // Global variables.
 var names = {};
 var rawData = {};
@@ -27,8 +31,10 @@ function populateCongress(data) {
 	}
 
 	// Set time period of available data.
-	startDate = rawData[0].transaction_date;
 	endDate = new Date().toISOString().slice(0, 10);
+	startDate = new Date();
+	startDate.setFullYear(startDate.getFullYear() - YEARS_HISTORY);
+	startDate = startDate.toISOString().slice(0, 10);
 
 	// fill the search list with the names.
 	document.getElementsByClassName("input-field").item(0).style.display = "block";
@@ -63,6 +69,15 @@ function populateStocks(name) {
 			});
 		}
 	}
+
+	// Sort trades by date.
+	trades = trades.sort((a,b) => {
+		if (a.date < b.date)
+			return -1;
+		else if (a.date > b.date)
+			return 1;
+		return 0;
+	});
 
 	// Fetch data for each stock.
 	for (let i = 0; i < stockNames.length; i++) {
@@ -154,7 +169,6 @@ function stockTrades() {
 
 	// Populate main card of page with info or chart.js
 	for (let i = 0; i < trades.length; i++) {
-		let tradeType = trades[i].type;
 		let newRow = document.createElement("tr");
 		let tickerName = document.createElement("td");
 		let purchaseDate = document.createElement("td");
@@ -165,24 +179,49 @@ function stockTrades() {
 		let volume = document.createElement("td");
 		let forecast = document.createElement("td");
 
-		// Skip entry if there is bad data.
-		if (trades[i].ticker === "--")
+		// Skip extry if exchange or bad data.
+		if (trades[i].type !== "purchase" && trades[i].type !== "sale_full" && trades[i].type !== "sale_partial" || trades[i].ticker === "--")
 			continue;
 
+		// Add price info for trades.
+		trades[i].price = getPrice(trades[i].ticker.replace("$", "-"), trades[i].date);
+		trades[i].gainLoss = getGainLoss(trades[i]);
+		trades[i].highLow = getStockForecast(trades[i].ticker.replace("$", "-"), trades[i].date);
+
+		// Fill cells with content.
 		tickerName.textContent = trades[i].ticker;
-
-		if (tradeType === "purchase") {
+		if (trades[i].type === "purchase") {
 			purchaseDate.textContent = trades[i].date;
-			purchasePrice.textContent = getPrice(trades[i].ticker.replace("$", "-"), trades[i].date);
-		} else if (tradeType === "sale_full" || tradeType === "sale_partial") {
+			purchasePrice.textContent = (trades[i].price != "???") ? "$" + trades[i].price : trades[i].price;
+		} else if (trades[i].type === "sale_full" || trades[i].type === "sale_partial") {
 			saleDate.textContent = trades[i].date;
-			salePrice.textContent = getPrice(trades[i].ticker.replace("$", "-"), trades[i].date);
-		} else
-			console.warn(trades[i].type + "s are not included.", trades[i]);
-		gainLoss.textContent = getGainLoss(trades[i]);
+			salePrice.textContent = (trades[i].price != "???") ? "$" + trades[i].price : trades[i].price;
+		}
+		if (trades[i].gainLoss.length > 0) {
+			gainLoss.textContent = trades[i].gainLoss + "%";
+			if (trades[i].gainLoss > 0)
+				gainLoss.classList.add("light-green-text", "text-bold");
+			else if (trades[i].gainLoss < 0)
+				gainLoss.classList.add("red-text", "text-bold");
+		}
 		volume.textContent = trades[i].volume;
-		forecast.textContent = getStockForecast(trades[i].ticker.replace("$", "-"), trades[i].date);
+		if (trades[i].highLow[0] != "?") {
+			forecast.textContent = "H: $" + trades[i].highLow[0] + "/L: $" + trades[i].highLow[1];
+			console.log("HIGHLOW", trades[i].price, trades[i].type, trades[i].highLow[0], trades[i].highLow[1])
+			if (trades[i].type == "purchase") {
+				if (parseFloat(trades[i].highLow[1]) > parseFloat(trades[i].price))
+					forecast.classList.add("light-green-text", "text-bold");
+				else if (parseFloat(trades[i].highLow[0]) < parseFloat(trades[i].price))
+					forecast.classList.add("red-text", "text-bold");
+			} else {
+				if (parseFloat(trades[i].highLow[0]) < parseFloat(trades[i].price))
+					forecast.classList.add("light-green-text", "text-bold");
+				else if (parseFloat(trades[i].highLow[1]) > parseFloat(trades[i].price))
+					forecast.classList.add("red-text", "text-bold");
+			}
+		}
 
+		// Attach everything to the row and body.
 		newRow.appendChild(tickerName);
 		newRow.appendChild(purchaseDate);
 		newRow.appendChild(purchasePrice);
@@ -212,9 +251,9 @@ function getPrice(name, date) {
 	if ("results" in stock) {
 		result = stock.results.find(elements => elements.t > day);
 		if (result != undefined)
-			return "$" + result.vw.toFixed(2);
+			return result.vw.toFixed(2);
 		else {
-			console.error("STOCK: BAD RESULTS", stock, result);
+			console.error("STOCK: BAD RESULTS", stock, name);
 			return "???";
 		}
 	} else {
@@ -228,21 +267,21 @@ function getGainLoss(trade) {
 	if (trade.type === "sale_full" || trade.type === "sale_partial") {
 		// Filter the data down to trades before this one.
 		let results = trades.filter(elements => elements.ticker == trade.ticker);
+
+		// search trades up to this point with same ticker and type purchase.
 		results = results.slice(0, results.indexOf(trade));
+		results = results.find(elements => elements.type == "purchase" && elements.price != "???");
 
-		for (let i = 0; i < results.length; i++) {
-			if (results[i].type == "purchase") {
-				let oldPrice = parseFloat(getPrice(results[i].ticker.replace("$", "-"), results[i].date).slice(1));
-				let newPrice = parseFloat(getPrice(trade.ticker.replace("$", "-"), trade.date).slice(1));
-				let difference = (newPrice / oldPrice * 100) - 100;
+		if (results != undefined && trade.price != "???") {
+			let oldPrice = results.price;
+			let newPrice = trade.price;
+			let difference = (newPrice / oldPrice * 100) - 100;
 
-				return difference.toFixed(0) + "%";
-			}
+			return difference.toFixed(0);
 		}
-		return "---";
-		// search trades up to this point with same ticker and type purchase
-	} else
-		return "---"
+	}
+
+	return "";
 }
 
 // Gets the forecast of the stock after the trade.
@@ -263,8 +302,8 @@ function getStockForecast(name, date) {
 			let high = results[0].vw;
 			let low = results[0].vw;
 
-			if (results.length > 60)
-				results.length = 60;
+			if (results.length > FORECAST_DAYS)
+				results.length = FORECAST_DAYS;
 
 			for (let i = 0; i < results.length; i++) {
 				if (results[i].vw > high)
@@ -273,9 +312,9 @@ function getStockForecast(name, date) {
 					low = results[i].vw;
 			}
 
-			return "H: $" + high.toFixed(2) + "/L: $" + low.toFixed(2);
+			return [high.toFixed(2), low.toFixed(2)];
 		} else {
-			console.error("STOCK: BAD RESULTS", stock, results);
+			console.error("STOCK: BAD RESULTS", stock);
 			return "???";
 		}
 	} else {
