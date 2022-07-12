@@ -37,7 +37,8 @@ function populateCongress(data) {
 	startDate = startDate.toISOString().slice(0, 10);
 
 	// fill the search list with the names.
-	document.getElementsByClassName("input-field").item(0).style.display = "block";
+	searchField.disabled = false;
+	document.getElementById("searchIcon").style.display = "inline-block";
 	M.Autocomplete.init(searchField, {
 		data: names,
 		limit: 10,
@@ -340,7 +341,7 @@ function getStockForecast(name, date) {
 // Fetch congresspersons' names before searching.
 window.onload = () => {
 	// Magnifying glass is hidden until fetched data is finished.
-	document.getElementsByClassName("input-field").item(0).style.display = "none";
+	document.getElementById("searchIcon").style.display = "none";
 
 	// API fetch list of all data.
 	fetch("https://house-stock-watcher-data.s3-us-west-2.amazonaws.com/data/all_transactions.json")

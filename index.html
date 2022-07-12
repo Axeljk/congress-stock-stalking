@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Congressional Stock Stalking</title>
+	<link rel="icon" type="image/png" href="./assets/img/favicon.png">
     <!--Import Google Icon Font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
@@ -14,29 +15,29 @@
     <link rel="stylesheet" href="assets\css\style.css">
 </head>
 <body>
+	<!-- Materialize for Nav Bar -->
+	<nav class="grey darken-3">
+		<div>
+			<img src="assets/img/StockStalk.png" alt="Stock Stalking Logo">
+			<a href="#" class="brand-logo">Congressional Stock&nbsp;Stalking</a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<li><a href="https://en.wikipedia.org/wiki/List_of_current_members_of_the_United_States_House_of_Representatives">Current US House Reps</a></li>
+			</ul>
+		</div>
+	</nav>
+		<!-- Materilizae for Search bar -->
+	<nav class="grey darken-3">
+        <div class="nav-wrapper">
+			<form style="height:64px">
+				<div class="input-field">
+					<input id="search" type="search" class="autocomplete" autocomplete=off required disabled>
+					<label id="searchIcon" class="label-icon" for="search"><i class="material-icons">search</i></label>
+					<i class="material-icons">close</i>
+				</div>
+			</form>
+		</div>
+	</nav>
   <main>
-  <!-- Materialize for Nav Bar -->
-    <nav>
-        <div class="nav-wrapper grey darken-3">
-          <a href="#" class="brand-logo">Congressional Stock Stalking</a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="https://en.wikipedia.org/wiki/List_of_current_United_States_senators">Current US Senators</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/List_of_current_members_of_the_United_States_House_of_Representatives">Current US House Reps</a></li>
-          </ul>
-        </div>
-    </nav>
-    <!-- Materilizae for Search bar -->
-    <nav>
-        <div class="nav-wrapper grey darken-3">
-          <form id="searchBar">
-            <div class="input-field">
-              <input id="search" type="search" class="autocomplete" autocomplete=off required>
-              <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-              <i class="material-icons">close</i>
-            </div>
-          </form>
-        </div>
-      </nav>
       <!-- Welcome Div -->
       <div id="welcome">
         <div class="row">
@@ -82,11 +83,11 @@
       </div>
       <!-- Results div for Results generation screen-->
     <div id="results">
-      <div class="row width:100%">
+      <div class="row">
         <!-- Materialize for Congressman Card -->
         <div class="col s12 m12 l3">
          <div id="congressCard">
-          <div class="card grey darken-3">
+          <div class="card grey darken-3 mainCard">
             <div class="card-image">
               <img id= "portrait" src="">
               <span id ="nameOnCard" class="card-content">Congressman Name</span>
@@ -102,63 +103,26 @@
          </div>
         </div>
       <!-- Materialize for Table Card -->
-        <div class="col s12 m12 l9">
-          <div class="card grey darken-3">
-            <div class="card-content white-text">
-              <span class="card-title">Stock Trades</span>
-              <!-- Materialize for table  -->
-              <table class="striped">
-                <thead>
-                  <tr>
-                      <th id="tickerHead">Ticker Name</th>
-                      <th id="purchseDateHead">Purchase Date</th>
-                      <th id="purchsePriceHead">Purchase Price</th>
-                      <th id="saleDateHead">Sale Date</th>
-                      <th id="salePriceHead">Sale Price</th>
-                      <th id="gainsHead">Gains/Loss</th>
-                      <th id="VolumeHead">Volume</th>
-                      <th id="forecastHead">Forecast</th>
-                  </tr>
+        <div class="col s12 m12 l9 grey darken-3 card-content white-text mainCard">
+            <!-- Materialize for table  -->
+			<h2>Stock Trades</h2>
+            <table class="striped">
+            	<thead>
+                	<tr>
+						<th id="tickerHead">Ticker Name</th>
+						<th id="purchseDateHead">Purchase Date</th>
+						<th id="purchsePriceHead">Purchase Price</th>
+						<th id="saleDateHead">Sale Date</th>
+						<th id="salePriceHead">Sale Price</th>
+						<th id="gainsHead">Gains/Loss</th>
+						<th id="VolumeHead">Volume</th>
+						<th id="forecastHead">Forecast</th>
+					</tr>
                 </thead>
-
                 <tbody>
-                  <tr>
-                    <td class="tickerSym"></td>
-                    <td class="purchaseDate"></td>
-                    <td class="purchasePrice"></td>
-                    <td class="saleDate"></td>
-                    <td class="salePrice"></td>
-                    <td class="gainsLoss"></td>
-                    <td class="volume"></td>
-                    <td class="forecast"></td>
-                  </tr>
-                  <tr>
-                    <td class="tickerSym"></td>
-                    <td class="purchaseDate"></td>
-                    <td class="purchasePrice"></td>
-                    <td class="saleDate"></td>
-                    <td class="salePrice"></td>
-                    <td class="gainsLoss"></td>
-                    <td class="volume"></td>
-                    <td class="forecast"></td>
-                  </tr>
-                  <tr>
-                    <td class="tickerSym"></td>
-                    <td class="purchaseDate"></td>
-                    <td class="purchasePrice"></td>
-                    <td class="saleDate"></td>
-                    <td class="salePrice"></td>
-                    <td class="gainsLoss"></td>
-                    <td class="volume"></td>
-                    <td class="forecast"></td>
-                  </tr>
                 </tbody>
-              </table>
-              <p>Stock Data collected from House Stock Watcher</p>
-            </div>
-            <div class="card-action">
-            </div>
-          </div>
+			</table>
+            <p>Stock Data collected from House Stock Watcher</p>
         </div>
 
       </div>
