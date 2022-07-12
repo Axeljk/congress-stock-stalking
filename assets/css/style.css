@@ -44,6 +44,11 @@ nav > div {
     text-align: center;
 
 }
+#mainLogo {
+	display: block;
+	width: 200px;
+	margin: 0 auto;
+}
 
 .wait {
     text-align: center;
