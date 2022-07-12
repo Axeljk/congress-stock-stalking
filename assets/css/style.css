@@ -10,6 +10,21 @@ body {
     color: var(--primaryText);
 }
 
+
+img {
+	top: 10px;
+	height: 3em;
+	display: inline-block;
+	position: relative;
+	padding: 0 10px;
+}
+nav {
+	height: 100%;
+}
+nav > div {
+	height: 100%;
+}
+
 #welcome {
     display: block;
     /* justify-content: center;
@@ -56,17 +71,17 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
-  }
+}
 
-  main {
-    flex: 1 0 auto;
-  }
+main {
+	flex: 1 0 auto;
+}
 
 input{
     color: white;
 }
 
-input:focus,
+input: cus,
 input:active {
     color: black;
 }
@@ -88,26 +103,20 @@ input:active {
   overflow-y: auto;
 } */
 
+tr,
+table,
 thead,
 tbody {
   width: 100%;
 }
 
 table {
-    max-height: 750px;
-    display:block ;
-    overflow: scroll;
+    height: calc(100vh - 300px);
+    overflow-y: auto;
+
 }
 
-tbody {
-  max-height: 750px;
-}
-
-tr {
-    width: 100%;
-}
-
-td {
+td, th {
     width: 12.5%;
     padding: 1em 0;
     text-align: center;
