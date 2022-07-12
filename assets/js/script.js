@@ -104,6 +104,10 @@ function populateStocks(name) {
 
 // Creates a bio card on the selected person.
 function populateBio(name) {
+	name = name.split(" ");
+    if (name.length > 2)
+        name.splice(1, name.length - 2);
+    name = name.join("_");
 	let url = "https://en.wikipedia.org/w/api.php";
 	// wikipedia image api
 
@@ -124,24 +128,25 @@ function populateBio(name) {
 		.then(response => response.json())
 		.then(function(data) {
 			var pageID = Object.keys(data.query.pages)[0]
-			var portrait = data.query.pages[pageID].thumbnail.source
+				if(data.query.pages[pageID].thumbnail==undefined)
+					document.getElementById("portrait").src = "assets/img/StockStalk.png"
+					else{var portrait = data.query.pages[pageID].thumbnail.source
+						var highResThumb = portrait.replace("thumb/", "")
+						var highRestSplit = highResThumb.split("/")
+						var finalPortrait = highRestSplit.slice(0,-1).join('/')
+						var finalPortrait = highRestSplit.slice(0,-1).join('/')
+						document.getElementById("portrait").src = finalPortrait
+					}
 			var nameOnCardtext = data.query.pages[pageID].title
 			console.log(data.query.pages[pageID].title)
 			console.log(portrait)
 
-			var highResThumb = portrait.replace("thumb/", "")
-
-			var highRestSplit = highResThumb.split("/")
-
-			var finalPortrait = highRestSplit.slice(0,-1).join('/')
+		
 			
-			console.log(highResThumb)
-			console.log(highRestSplit)
-			console.log(finalPortrait)
+
+		
 
 
-
-			document.getElementById("portrait").src = finalPortrait
 			document.getElementById("nameOnCard").innerHTML = nameOnCardtext
 	})
 
@@ -231,7 +236,6 @@ function stockTrades() {
 		volume.textContent = trades[i].volume;
 		if (trades[i].highLow[0] != "?") {
 			forecast.textContent = "H: $" + trades[i].highLow[0] + "/L: $" + trades[i].highLow[1];
-			console.log("HIGHLOW", trades[i].price, trades[i].type, trades[i].highLow[0], trades[i].highLow[1])
 			if (trades[i].type == "purchase") {
 				if (parseFloat(trades[i].highLow[1]) > parseFloat(trades[i].price))
 					forecast.classList.add("light-green-text", "text-bold");
